@@ -19,7 +19,7 @@ const logRequest =(req, res, next)=>{
     console.log(`[${new Date().toLocaleDateString} request made to : ${req.orginalUrl}]`);
 }
 
-app.get('/',logRequest, function(req, res){
+app.get('/', function(req, res){
     res.send("Welcome to My Hotel ");
 })
 
