@@ -51,7 +51,7 @@ const personSchema = new mongoose.Schema({
         //salt generation
         const salt = await bcrypt.genSalt(5);
         //has password
-        const hashPassword = await bcrypt.password(person.password,salt);
+        const hashPassword = await bcrypt.hash(person.password,salt);
         //override the plain password
         person.password = hashPassword;
         next();
@@ -60,6 +60,17 @@ const personSchema = new mongoose.Schema({
         return next(err);
     }
   })
+
+  personSchema.methods.comparePassword = async function(candidatePassword){
+   
+    try {
+        //use bcrypt to comapre given password to hash password
+        const isMatch = await bcrypt.compare(candidatePassword, this.password);
+        return isMatch;
+    } catch (err) {
+        return err;
+    }
+  }
 
 const Person =mongoose.model('Person',personSchema);
 module.exports = Person;
