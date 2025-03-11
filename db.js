@@ -4,8 +4,8 @@ require('dotenv').config();
 //const dbURL = process.env.MONGODB_URL;
 const dbUrlLocal = process.env.MONGODB_URL_LOCAL;
 //const db = mongoose.connect(dbURLLOCAL)
-const db =mongoose.connect('mongodb://localhost:27017/test');
-//console.log(db);
+const db =mongoose.connect(dbUrlLocal, { useNewUrlParser: true, useUnifiedTopology: true })
+
 db.then(() => {
 console.log('Connected to MongoDB Server');
 }).catch(err => {
