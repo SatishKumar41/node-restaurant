@@ -1,24 +1,18 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-//const mongodbURL = process.env.MONGODB_URL;
-const dbURLLOCAL = process.env.MONGODB_URL_LOCAL;
+//const dbURL = process.env.MONGODB_URL;
+const dbUrlLocal = process.env.MONGODB_URL_LOCAL;
 //const db = mongoose.connect(dbURLLOCAL)
-mongoose.connect(dbURLLOCAL,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+const db =mongoose.connect('mongodb://localhost:27017/mydatabase');
+//console.log(db);
+db.then(() => {
+console.log('Connected to MongoDB Server');
+}).catch(err => {
+console.error('Error connecting to MongoDB Server', err);
+});
 
-const db =mongoose.connection;
-
-db.on('connected', ()=>{console.log('Connected to MongoDB Server')})
-db.on('error', (err)=>{console.error('Error connecting to MongoDB Server', err)})
-db.on('disconnected', ()=>{console.log('Disconnected from MongoDB Server')})
-
-
-//Export a database Connection
-
-module.export = db;
+module.exports= db;
 
 
  

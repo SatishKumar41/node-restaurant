@@ -14,9 +14,13 @@ app.use('/person', personRoutes);
 
 app.use('/menu', menuItem);
 
+//Middleware function
+const logRequest =(req, res, next)=>{
+    console.log(`[${new Date().toLocaleDateString} request made to : ${req.orginalUrl}]`);
+}
 
-app.get('/', function(req, res){
-    res.send("Welcome to My Hotels... ");
+app.get('/',logRequest, function(req, res){
+    res.send("Welcome to My Hotel ");
 })
 
 const PORT = process.env.PORT || 3001
