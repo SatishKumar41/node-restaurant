@@ -11,7 +11,11 @@ router.post('/signup', async(req, res)=>{
         const response = await newPerson.save();
         console.log('Data saved',response);
 
-        const token =generateToken(response.username);
+        const payload = {
+            id:response.id,
+            username:response.username
+        }
+       const token =generateToken(payload);
         console.log("Token is : ", token);
         res.status(200).json({response:response, token :token});
         
@@ -20,6 +24,29 @@ router.post('/signup', async(req, res)=>{
             res.status(500).json({error: 'Internal Server Error'});
     }
 })
+
+//login Route
+router.post('/login', async (req, res)=>{
+    try {
+        // Extract user details 
+        const {username, password} =req.body; 
+        //find user in database
+        const user = await Person.find({username: username});
+        if (!user || !(await  user.comparePassword(password))) return res.status(401).json({error: "Invalid username or password"});
+        //generate token
+        const payload={
+            id:user.id,
+            username:user.username
+        }
+        const token = generateToken(payload);
+        res.json(token);
+        
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Internal Server Error'});
+    }
+
+});
 
 router.get('/', async(req, res)=>{
     try {
