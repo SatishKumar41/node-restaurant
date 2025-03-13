@@ -15,6 +15,7 @@ const jwtAuthMiddleware =(req, res, next)=>{
 
             //Attach user info to request object
             req.user = decoded;
+            next();
         } catch (err) {
             console.error(err);
             res.status(401).json({error: "Unauthorized"});
