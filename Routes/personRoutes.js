@@ -30,9 +30,11 @@ router.post('/login', async(req, res)=>{
     try {
         // Extract user details 
         const {username, password} = req.body; 
+        
         //find user in database
-        const user = await Person.find({username: username});
-        if (!user || !(await user.methods.comparePassword(password))) return res.status(401).json({error: "Invalid username or password"});
+        const user = await Person.findOne({username: username});
+        const Cpass =await user.comparePassword(password); //console.log(pass);
+        if (!user || !Cpass) return res.status(401).json({error: "Invalid username or password"});
         //generate token
         const payload={
             id: user.id,
@@ -48,7 +50,7 @@ router.post('/login', async(req, res)=>{
 
 });
 
-router.get('/', async(req, res)=>{
+router.get('/', jwtAuthMiddleware, async(req, res)=>{
     try {
         const data = await Person.find();
         console.log('data feteched');
